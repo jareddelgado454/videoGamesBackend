@@ -4,19 +4,20 @@ const fs = require('fs');
 const path = require('path');
 const {
   DATABASE_URL,
-  PGDATABASE,
-  PGHOST,
-  PGPASSWORD,
-  PGPORT,
-  PGUSER,
 } = process.env;
 
 
-const sequelize = new Sequelize(DATABASE_URL || `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`, {
+const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
   dialectModule: require('pg'),
-  logging: false, // set to console.log to see the raw SQL queries
-  native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  logging: false,
+  native: false,
+  ssl: true,
+  dialectOptions: {
+    ssl: {
+      require: true,
+    },
+  },
 });
 const basename = path.basename(__filename);
 
